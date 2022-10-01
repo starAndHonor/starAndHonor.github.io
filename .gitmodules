@@ -1,0 +1,3 @@
+[submodule ".\\themes\\next"]
+	path = .\\themes\\next
+	url = git@github.com:starAndHonor/hexo-theme-next.git
