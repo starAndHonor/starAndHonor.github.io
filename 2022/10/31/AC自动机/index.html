@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#222">
+  <link rel="manifest" href="/images/manifest-150x150.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"starandhonor.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="something about AC自动机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AC自动机">
+<meta property="og:url" content="https://starandhonor.github.io/2022/10/31/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/index.html">
+<meta property="og:site_name" content="starAndHonor的小站">
+<meta property="og:description" content="something about AC自动机">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-31T12:51:27.000Z">
+<meta property="article:modified_time" content="2022-11-01T07:48:23.307Z">
+<meta property="article:author" content="starAndHonor">
+<meta property="article:tag" content="字符串">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://starandhonor.github.io/2022/10/31/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AC自动机 | starAndHonor的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">starAndHonor的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://starandhonor.github.io/2022/10/31/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/apple-touch-icon.png">
+      <meta itemprop="name" content="starAndHonor">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="starAndHonor的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AC自动机
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-31 20:51:27" itemprop="dateCreated datePublished" datetime="2022-10-31T20:51:27+08:00">2022-10-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-01 15:48:23" itemprop="dateModified" datetime="2022-11-01T15:48:23+08:00">2022-11-01</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>something about AC自动机</p>
+<span id="more"></span>
+<h1 id="AC自动机"><a href="#AC自动机" class="headerlink" title="AC自动机"></a>AC自动机</h1><h2 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h2><ol>
+<li>对于AC自动机的理解:<ul>
+<li>粗浅的理解:trie树+KMP</li>
+<li>AC自动机上的每个点是一个状态，每一条边则是一种状态向另一种状态的转移，所以AC自动机可以和DP优雅地结合</li>
+<li>AC自动机是一张图，所以许多图上算法在AC自动机上任然使用，所以经常构建完以后就变成了图论题</li>
+</ul>
+</li>
+<li>fail指针<br>定义:表示从根节点到该节点所组成字符序列的所有后缀和整个模式字符串集合即整个Trie树中所有前缀两者中的最长公共部分。fail指针的优化作用体现于可以减少不必要的重复匹配，类似于将KMP的border放在树上跳</li>
+</ol>
+<h2 id="经典问题"><a href="#经典问题" class="headerlink" title="经典问题"></a>经典问题</h2><blockquote>
+<p>给定 n 个模式串和一个文本串t，求有多少个不同的模式串在文本串里出现过。两个模式串不同当且仅当他们编号不同。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">AC</span> &#123;</span><br><span class="line">  <span class="type">int</span> tr[MAXN][<span class="number">30</span>], cnt[MAXN], fail[MAXN], tot = <span class="number">0</span>;</span><br><span class="line">  queue&lt;<span class="type">int</span>&gt; q;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(string s)</span> </span>&#123; <span class="comment">// Trie树的插入</span></span><br><span class="line">    <span class="type">int</span> u = <span class="number">0</span>, len = s.<span class="built_in">length</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> v, i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">      v = s[i] - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">      <span class="keyword">if</span> (!tr[u][v])</span><br><span class="line">        tr[u][v] = ++tot;</span><br><span class="line">      u = tr[u][v];</span><br><span class="line">    &#125;</span><br><span class="line">    ++cnt[u];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">build</span><span class="params">()</span> </span>&#123; <span class="comment">// BFS构建fail指针———灵魂</span></span><br><span class="line">    <span class="keyword">while</span> (q.<span class="built_in">size</span>())</span><br><span class="line">      q.<span class="built_in">pop</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++) <span class="comment">//第一层的fail指向根节点</span></span><br><span class="line">      <span class="keyword">if</span> (tr[<span class="number">0</span>][i])</span><br><span class="line">        fail[tr[<span class="number">0</span>][i]] = <span class="number">0</span>, q.<span class="built_in">push</span>(tr[<span class="number">0</span>][i]);</span><br><span class="line">    <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">      <span class="type">int</span> u = q.<span class="built_in">front</span>();</span><br><span class="line">      q.<span class="built_in">pop</span>();</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++)</span><br><span class="line">        <span class="keyword">if</span> (tr[u][i])</span><br><span class="line">          fail[tr[u][i]] = tr[fail[u]][i],</span><br><span class="line">          q.<span class="built_in">push</span>(tr[u][i]); <span class="comment">// 儿子的fail是fail的儿子</span></span><br><span class="line">        <span class="comment">//(因为当前节点fail指向的节点是与其后缀有最长公共前缀的节点</span></span><br><span class="line">        <span class="comment">//显然如果当前模式串还没有匹配上的话，可以去匹配和他只有最后一个字符不同的模式串</span></span><br><span class="line">        <span class="comment">//这样就能省去再次重新匹配前缀的时间)</span></span><br><span class="line">        <span class="keyword">else</span> <span class="comment">//如果当前节点不存在字符为c的儿子，那就考虑去匹配和当前字符只有最后一位不同的fail[u]是否有c这个儿子</span></span><br><span class="line">          tr[u][i] = tr[fail[u]][i];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">query</span><span class="params">(string s)</span> </span>&#123; <span class="comment">//查询有多少个不同的模式串在文本串里出现过</span></span><br><span class="line">    <span class="type">int</span> u = <span class="number">0</span>, ans = <span class="number">0</span>, len = s.<span class="built_in">length</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123; <span class="comment">// Trie树查询+跳fail</span></span><br><span class="line">      u = tr[u][s[i] - <span class="string">&#x27;a&#x27;</span>];</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> pos = u; pos &amp;&amp; ~cnt[pos]; pos = fail[pos])</span><br><span class="line">        <span class="comment">//如果cnt已经为-1了，那么就说明之前的再往上跳fail都已经被匹配过了。</span></span><br><span class="line">        ans += cnt[pos],</span><br><span class="line">            cnt[pos] = <span class="number">-1</span>; <span class="comment">//如果纳入统计了就标记为-1，这样可以防止反复统计</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; AK;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line">string s;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">work</span><span class="params">(<span class="type">signed</span> CASE = <span class="number">1</span>, <span class="type">bool</span> FINAL_CASE = <span class="literal">false</span>)</span> </span>&#123;</span><br><span class="line">  cin &gt;&gt; n;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    cin &gt;&gt; s, AK.<span class="built_in">insert</span>(s); <span class="comment">//注意插入的是模式串</span></span><br><span class="line">  cin &gt;&gt; s;</span><br><span class="line">  AK.<span class="built_in">build</span>(); <span class="comment">//一定要构建</span></span><br><span class="line">  cout &lt;&lt; AK.<span class="built_in">query</span>(s) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>有 N 个由小写字母组成的模式串以及一个文本串 T。每个模式串可能会在文本串中出现多次。你需要找出哪些模式串在文本串 T 中出现的次数最多。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">string T[MAXN], S;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">AC</span> &#123;</span><br><span class="line">  <span class="type">int</span> tr[MAXN][<span class="number">30</span>], fail[MAXN], tot = <span class="number">0</span>, end[MAXN];</span><br><span class="line">  <span class="type">int</span> ans[MAXN];</span><br><span class="line">  queue&lt;<span class="type">int</span>&gt; q;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123; <span class="built_in">mmst0</span>(tr), <span class="built_in">mmst0</span>(fail), <span class="built_in">mmst0</span>(end), tot = <span class="number">0</span>; &#125; <span class="comment">//清空AC自动机</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(string s, <span class="type">int</span> idx)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> u = <span class="number">0</span>, len = s.<span class="built_in">length</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> v, i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">      v = s[i] - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">      <span class="keyword">if</span> (!tr[u][v])</span><br><span class="line">        tr[u][v] = ++tot;</span><br><span class="line">      u = tr[u][v];</span><br><span class="line">    &#125;</span><br><span class="line">    end[u] = idx;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (q.<span class="built_in">size</span>())</span><br><span class="line">      q.<span class="built_in">pop</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++)</span><br><span class="line">      <span class="keyword">if</span> (tr[<span class="number">0</span>][i])</span><br><span class="line">        fail[tr[<span class="number">0</span>][i]] = <span class="number">0</span>, q.<span class="built_in">push</span>(tr[<span class="number">0</span>][i]);</span><br><span class="line">    <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">      <span class="type">int</span> u = q.<span class="built_in">front</span>();</span><br><span class="line">      q.<span class="built_in">pop</span>();</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++)</span><br><span class="line">        <span class="keyword">if</span> (tr[u][i])</span><br><span class="line">          fail[tr[u][i]] = tr[fail[u]][i], q.<span class="built_in">push</span>(tr[u][i]);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          tr[u][i] = tr[fail[u]][i];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">query</span><span class="params">(string s)</span> </span>&#123;<span class="comment">//简单改换一下查询方式即可</span></span><br><span class="line">    <span class="built_in">mmst0</span>(ans); <span class="comment">//清空ans</span></span><br><span class="line">    <span class="type">int</span> u = <span class="number">0</span>, len = s.<span class="built_in">length</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">      u = tr[u][s[i] - <span class="string">&#x27;a&#x27;</span>];</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> pos = u; pos; pos = fail[pos]) <span class="comment">//查询出现次数</span></span><br><span class="line">        ans[end[pos]]++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; AK;</span><br><span class="line"><span class="type">int</span> n, p[MAXN];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">work</span><span class="params">(<span class="type">signed</span> CASE = <span class="number">1</span>, <span class="type">bool</span> FINAL_CASE = <span class="literal">false</span>)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (cin &gt;&gt; n) &#123;</span><br><span class="line">    AK.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">      cin &gt;&gt; T[i], AK.<span class="built_in">insert</span>(T[i], i);</span><br><span class="line">    cin &gt;&gt; S;</span><br><span class="line">    AK.<span class="built_in">build</span>();</span><br><span class="line">    AK.<span class="built_in">query</span>(S);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">      p[i] = i;</span><br><span class="line">    <span class="built_in">sort</span>(p + <span class="number">1</span>, p + <span class="number">1</span> + n, [](<span class="keyword">auto</span> a, <span class="keyword">auto</span> b) &#123;</span><br><span class="line">      <span class="keyword">return</span> AK.ans[a] == AK.ans[b] ? a &lt; b : AK.ans[a] &gt; AK.ans[b];</span><br><span class="line">    &#125;);</span><br><span class="line">    cout &lt;&lt; AK.ans[p[<span class="number">1</span>]] &lt;&lt; <span class="string">&quot;\n&quot;</span> &lt;&lt; T[p[<span class="number">1</span>]] &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (AK.ans[p[i]] == AK.ans[p[i - <span class="number">1</span>]])</span><br><span class="line">        cout &lt;&lt; T[p[i]] &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>一个文本串 S 和 n 个模式串 T ，请你分别求出每个模式串 T 在 S 中出现的次数。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">string T[MAXN], S;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">AC</span> &#123;</span><br><span class="line">  <span class="type">int</span> tr[MAXN][<span class="number">30</span>], fail[MAXN], tot = <span class="number">0</span>;</span><br><span class="line">  vector&lt;<span class="type">int</span>&gt; end[MAXN];</span><br><span class="line">  <span class="type">int</span> ans[MAXN];</span><br><span class="line">  queue&lt;<span class="type">int</span>&gt; q;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123; <span class="built_in">mmst0</span>(tr), <span class="built_in">mmst0</span>(fail), <span class="built_in">mmst0</span>(end), tot = <span class="number">0</span>; &#125; <span class="comment">//清空AC自动机</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(string s, <span class="type">int</span> idx)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> u = <span class="number">0</span>, len = s.<span class="built_in">length</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> v, i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">      v = s[i] - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">      <span class="keyword">if</span> (!tr[u][v])</span><br><span class="line">        tr[u][v] = ++tot;</span><br><span class="line">      u = tr[u][v];</span><br><span class="line">    &#125;</span><br><span class="line">    end[u].<span class="built_in">push_back</span>(idx); <span class="comment">//因为可能模式串相同，所以把询问挂在节点上</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (q.<span class="built_in">size</span>())</span><br><span class="line">      q.<span class="built_in">pop</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++)</span><br><span class="line">      <span class="keyword">if</span> (tr[<span class="number">0</span>][i])</span><br><span class="line">        fail[tr[<span class="number">0</span>][i]] = <span class="number">0</span>, q.<span class="built_in">push</span>(tr[<span class="number">0</span>][i]);</span><br><span class="line">    <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">      <span class="type">int</span> u = q.<span class="built_in">front</span>();</span><br><span class="line">      q.<span class="built_in">pop</span>();</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++)</span><br><span class="line">        <span class="keyword">if</span> (tr[u][i])</span><br><span class="line">          fail[tr[u][i]] = tr[fail[u]][i], q.<span class="built_in">push</span>(tr[u][i]);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          tr[u][i] = tr[fail[u]][i];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">query</span><span class="params">(string s)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">mmst0</span>(ans); <span class="comment">//清空ans</span></span><br><span class="line">    <span class="type">int</span> u = <span class="number">0</span>, len = s.<span class="built_in">length</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">      u = tr[u][s[i] - <span class="string">&#x27;a&#x27;</span>];</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> pos = u; pos; pos = fail[pos]) <span class="comment">//查询出现次数</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> v : end[pos])               <span class="comment">//遍历节点上的询问</span></span><br><span class="line">          ans[v]++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; AK;</span><br><span class="line"><span class="type">int</span> n, p[MAXN];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">work</span><span class="params">(<span class="type">signed</span> CASE = <span class="number">1</span>, <span class="type">bool</span> FINAL_CASE = <span class="literal">false</span>)</span> </span>&#123;</span><br><span class="line">  cin &gt;&gt; n;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    cin &gt;&gt; T[i], AK.<span class="built_in">insert</span>(T[i], i);</span><br><span class="line">  cin &gt;&gt; S;</span><br><span class="line">  AK.<span class="built_in">build</span>();</span><br><span class="line">  AK.<span class="built_in">query</span>(S);</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">    cout &lt;&lt; AK.ans[i] &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"># 字符串</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/07/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2%E4%B8%8E%E4%BD%8D%E8%BF%90%E7%AE%97/" rel="prev" title="进制转换与位运算">
+      <i class="fa fa-chevron-left"></i> 进制转换与位运算
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AC%E8%87%AA%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">AC自动机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%A7%A3"><span class="nav-number">1.1.</span> <span class="nav-text">理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.</span> <span class="nav-text">经典问题</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="starAndHonor"
+      src="/images/apple-touch-icon.png">
+  <p class="site-author-name" itemprop="name">starAndHonor</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/starAndHonor" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;starAndHonor" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">starAndHonor</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">6k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>
