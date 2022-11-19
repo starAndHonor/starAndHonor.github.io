@@ -146,6 +146,98 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://starandhonor.github.io/2022/11/05/%E5%B9%B6%E6%9F%A5%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/apple-touch-icon.png">
+      <meta itemprop="name" content="starAndHonor">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="starAndHonor的小站">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/11/05/%E5%B9%B6%E6%9F%A5%E9%9B%86/" class="post-title-link" itemprop="url">并查集</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-05 22:38:53" itemprop="dateCreated datePublished" datetime="2022-11-05T22:38:53+08:00">2022-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-06 20:15:29" itemprop="dateModified" datetime="2022-11-06T20:15:29+08:00">2022-11-06</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>808</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="板子"><a href="#板子" class="headerlink" title="板子"></a>板子</h2><p>并查集是一种最为简洁而又优雅的数据结构。并查集是一种可以动态维护若干个不重叠的集合，支持合并与查询的数据结构。<br>并查集有两种基本操作：</p>
+<ul>
+<li>合并（Merge）：把两个集合合并为一个集合。</li>
+<li>查询（Find）：查询一个元素在哪个集合。</li>
+</ul>
+<p>集合的表示方式采用代表元法：即在每一个集合中选取一个固定的元素作为集合的代表。并查集使用树形结构来存储集合，树上每一个节点是一个元素，树根是集合元素的代表。</p>
+<p>如是还是慢，于是人们想出了优化：</p>
+<ul>
+<li>路径压缩（会损失信息，有些题不可用）：每次执行find时候将元素全部直接只向根节点</li>
+<li>按秩合并（有些题会对于合并时哪个作根给出限制，此时不可用）：类似于启发式和并的思想，将小结构和并到大结构上，当将集合大小作为秩时就是启发式合并（好写，但是将集合大小作为秩是可以卡的，但是基本没人会去卡，实在不行，随机合并，大抵是难卡的），将没有路径压缩时的深度作为秩，好像比较好（但是其实只写路径压缩是nlogn,一般不卡时限就差不多了）。</li>
+</ul>
+<p>Tarjan Robert证明了同时使用路径压缩和按秩合并的并查集$\alpha(N)$的复杂度，在OI中几乎可以认为是常数</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> fa[MAXN];<span class="comment">//父节点</span></span><br><span class="line"><span class="type">int</span> sz[MAXN];<span class="comment">//集合大小作为秩</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">build</span><span class="params">(<span class="type">int</span> n)</span></span>&#123;<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>;i&lt;=n;i++)fa[i] = i,sz[i] = <span class="number">1</span>;&#125;<span class="comment">//开始时一个元素构成一个集合</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">find</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;<span class="keyword">return</span> fa[x]==x?x:fa[x]=<span class="built_in">find</span>(fa[x]);&#125;<span class="comment">//路径压缩</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">merge</span><span class="params">(<span class="type">int</span> u,<span class="type">int</span> v)</span></span>&#123;<span class="comment">//启发式合并</span></span><br><span class="line">    <span class="keyword">if</span>(sz[u]&gt;sz[v])<span class="built_in">swap</span>(u,v);</span><br><span class="line">    fa[u] = v,sz[v]+=sz[u];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>并查集常常用于解决连通性问题，擅长动态维护许多有传递性的关系</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://starandhonor.github.io/2022/10/31/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +269,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-11-01 21:05:33" itemprop="dateModified" datetime="2022-11-01T21:05:33+08:00">2022-11-01</time>
+                <time title="修改时间：2022-11-19 16:51:28" itemprop="dateModified" datetime="2022-11-19T16:51:28+08:00">2022-11-19</time>
               </span>
 
           <br>
@@ -632,12 +724,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -678,12 +770,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">10k</span>
+    <span title="站点总字数">11k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">9 分钟</span>
+    <span title="站点阅读时长">10 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
