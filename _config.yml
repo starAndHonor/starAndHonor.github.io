@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: starAndHonor的小破站
+title: 南烛的小破站
 subtitle: ''
 description: ''
 keywords:
-author: starAndHonor
+author: 南烛
 language: zh-CN
 timezone: ''
 
@@ -123,3 +123,25 @@ symbols_count_time:
   # 站点总阅读时间统计
   total_time: false
   exclude_codeblock: false
+
+markdown:
+  render:
+    html: true
+    xhtmlOut: false
+    breaks: true
+    linkify: true
+    typographer: true
+    quotes: '“”‘’'
+  plugins:
+    - markdown-it-abbr
+    - markdown-it-footnote
+    - markdown-it-ins
+    - markdown-it-sub
+    - markdown-it-sup
+    - markdown-it-emoji  # add emoji
+  anchors:
+    level: 2
+    collisionSuffix: 'v'
+    permalink: true
+    permalinkClass: header-anchor
+    permalinkSymbol: ¶
